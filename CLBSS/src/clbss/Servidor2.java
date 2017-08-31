@@ -1,0 +1,34 @@
+package clbss;
+
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class Servidor2 {
+    public static void main(String[] args) throws IOException {
+        try {
+            ServerSocket ss = new ServerSocket(5555);
+            Socket s = ss.accept();
+            DataInputStream dataInput = new DataInputStream(s.getInputStream());
+            DataOutputStream dataOutput = new DataOutputStream(s.getOutputStream());
+            
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            String msgInput = "", msgOutput = "";
+            
+            while(!msgInput.equals("terminar")){
+                msgInput = dataInput.readUTF();
+                System.out.println(msgInput);
+                msgOutput = br.readLine();
+                dataOutput.writeUTF("Servidor 2: " + msgOutput);
+                dataOutput.flush();
+            }
+            s.close();
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
+        }
+    }
+}
